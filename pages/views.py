@@ -7,12 +7,13 @@ from .models import Pages
 class PagesView(View):
 
 	def get(self, request, *arg, **kwargs):
-		try:
-			page = Pages.objects.get(slug=self.kwargs.get('slug'))
-			return render(request, 'page.html', { 'page': page } )
-
-		except Pages.DoesNotExist:
-			raise Http404('Page does not exists.')
-		return render(request, 'index.html', { 'page': Pages.objects.get(is_home=True) } )
+		if self.kwargs.get('slug'):
+			try:
+				page = Pages.objects.get(slug=self.kwargs.get('slug'))
+				return render(request, 'page.html', { 'page': page } )
+			except Pages.DoesNotExist:
+				raise Http404('Page does not exists.')
+		else:
+			return render(request, 'index.html', { 'page': Pages.objects.get(is_home=True) } )
 
 
