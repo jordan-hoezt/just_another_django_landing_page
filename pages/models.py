@@ -8,8 +8,12 @@ import re
 class Pages(models.Model):
 	title = models.CharField(max_length=100)
 	slug = models.SlugField(blank=True)
-	meta_title = models.CharField('Title (meta)' max_length=100, blank=True)
+	is_home = models.BooleanField('Homepage?', default=False)
+	meta_title = models.CharField('Title (meta)', max_length=100, blank=True)
 	meta_description = models.CharField('Description (meta)', max_length=250, blank=True)
+
+	class Meta:
+		verbose_name_plural = "Pages"
 
 	def save(self, *args, **kwargs):
 		# Auto generate slug from title
@@ -18,13 +22,20 @@ class Pages(models.Model):
 		else:
 			slug = slugify(self.title)
 		# Add numbering to slug if exists
-		similar_name = Pages.objects.filter(slug__startswith=slug)
+		similar_name = Pages.objects.filter(slug=slug)
+		similar_name = similar_name.exclude(pk=self.pk)
 		if similar_name.count() > 0:
-			slug = slug + '-' + str(similar_name.count())
+			count = Pages.objects.filter(slug__startswith=slug+'-').count() + 1
+			slug = slug + '-' + str(count)
 
 		# Auto generate the meta from title
 		if not self.meta_title:
 			self.meta_title = self.title
+
+		# There will be only one home
+		if self.is_home:
+			other_home = Pages.objects.filter(is_home=True)
+			other_home.update(is_home=False)
 
 		# Saving the models
 		self.slug = slug
