@@ -7,6 +7,8 @@
 	<title>{% block title %}Page{% endblock %}</title>
 	<!-- scripts and style -->
 	{% block scripts_and_styles %}
+	<script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+	<link rel="stylesheet" type="text/css" href="{% sass_src 'scss/main.scss' %}">
 	{% endblock %}
 </head>
 <body>
