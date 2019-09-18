@@ -1,12 +1,51 @@
+{% load static sass_tags %}
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
 	<title>{% block title %}Page{% endblock %}</title>
+	<!-- scripts and style -->
+	{% block scripts_and_styles %}
+	{% endblock %}
 </head>
 <body>
-	{% block content %}
-	{% endblock %}
+	{% spaceless %}
+	{% block before_outer_wrap %}{% endblock %}
+	<div id="outer-wrap" class="site">
+		{% block before_wrap %}{% endblock %}
+		<div id="wrap">
+			{% block before_header %}{% endblock %}
+			<header id="site-header">
+				{% block header_start %}{% endblock %}
+				{% include 'template-parts/header.html' %}
+				{% block header_end %}{% endblock %}
+			</header>
+			<!-- #Header -->
+			{% block before_main %}{% endblock %}
+			<main id="main">
+				{% block before_content_wrap %}{% endblock %}
+				<div id="content-wrap" class="container">
+					{% block content %}{% endblock %}
+				</div>
+				{% block after_content_wrap %}{% endblock %}
+			</main>
+			{% block after_main %}{% endblock %}
+			<!-- #main -->
+			{% block before_footer %}{% endblock %}
+			<footer id="site-footer">
+				{% block footer_start %}{% endblock %}
+				{% include 'template-parts/footer.html' %}
+				{% block footer_end %}{% endblock %}
+			</footer>
+			{% block after_footer %}{% endblock %}
+			<!-- #site-footer -->
+		</div>
+		<!-- #wrap -->
+		{% block after_wrap %}{% endblock %}
+	</div>
+	{% block after_outer_wrap %}{% endblock %}
+	<!-- #outer-wrap -->
+	{% endspaceless %}
 </body>
 </html>
